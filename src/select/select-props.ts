@@ -17,4 +17,7 @@ export class ElSelectPoprs {
   @Input() model: any
   @Output() modelChange: EventEmitter<any> = new EventEmitter<any>()
   
+  @Input() searchable: boolean = false;
+  @Input() search: string | number;
+  @Output() searchChange: EventEmitter<string | number> = new EventEmitter<string | number>()
 }

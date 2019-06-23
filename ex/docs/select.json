@@ -63,6 +63,27 @@
       "type": "boolean",
       "enum": null,
       "default": false
+    },
+    {
+      "name": "searchable",
+      "notes": "Enable searching",
+      "type": "boolean",
+      "enum": null,
+      "default": false
+    },
+    {
+      "name": "search",
+      "notes": "Search query",
+      "type": "string | number",
+      "enum": null,
+      "default": false
+    },
+    {
+      "name": "searchChange",
+      "notes": "The event that is triggered when the search query has changed.",
+      "type": "EventEmitter",
+      "enum": null,
+      "default": false
     }
   ]
 }

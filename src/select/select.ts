@@ -22,7 +22,7 @@ export type SelectOption = {
     .el-select__tags__padding { padding-right: 30px; }
   `],
   template: `
-    <div class="el-select" (click)="toggleHandle($event)">
+    <div [className]="'el-select '+(size ? 'el-select--'+ size : '')" (click)="toggleHandle($event)">
       <div class="el-select__tags el-select__tags__padding" *ngIf="multiple && model && model.length" #tags>
         <el-tag *ngFor="let tag of multipleLabels; let i = index"
           [closable]="!elDisabled"
@@ -33,13 +33,18 @@ export type SelectOption = {
       
       <el-input iconClass="el-select__caret" #input
         [model]="selectedLabel"
-        [placeholder]="multiple ? multiplePlaceholder : placeholder"
+        (modelChange)="updateLabel($event)"
+        [placeholder]="multiple ? multiplePlaceholder : currentPlaceholder"
         [icon]="iconClass"
         [name]="name"
         [size]="size"
-        [elDisabled]="elDisabled" [readonly]="true"
-        (mouseenter)="mouseHandle(true)" (mouseleave)="mouseHandle(false)"
-        (icon-click)="clearSelected($event)">
+        [elDisabled]="elDisabled"
+        [readonly]="!searchable || multiple || !dropdownActive"
+        [className]="dropdownActive ? 'is-focus' : ''"
+        (mouseenter)="mouseHandle(true)"
+        (mouseleave)="mouseHandle(false)"
+        (icon-click)="clearSelected($event)"
+      >
       </el-input>
       <ng-container>
         <el-select-dropdown [isActived]="dropdownActive">
@@ -64,6 +69,8 @@ export class ElSelect extends ElSelectPoprs implements OnInit, OnDestroy, OnChan
   selectedLabel: string | number
   iconClass: string = 'arrow-up'
   globalListener: Function
+  currentPlaceholder: string | number = '';
+  cachedPlaceholder: string | number = '';
   
   private selectOptions: SelectOption[] = []
   
@@ -73,6 +80,10 @@ export class ElSelect extends ElSelectPoprs implements OnInit, OnDestroy, OnChan
     private window: WindowWrapper,
   ) {
     super()
+  }
+
+  updateLabel(value: string) {
+    this.searchChange.next(value);
   }
   
   mouseHandle(isEnter: boolean = false): void {
@@ -86,6 +97,17 @@ export class ElSelect extends ElSelectPoprs implements OnInit, OnDestroy, OnChan
     if (this.elDisabled) return
     event && event.stopPropagation()
     this.dropdownActive = !this.dropdownActive
+    if (this.searchable && !this.multiple) {
+      if (this.dropdownActive) {
+        this.cachedPlaceholder = this.selectedLabel;
+        this.currentPlaceholder = this.model ? this.selectedLabel : this.placeholder;
+        this.selectedLabel = '';
+        this.searchChange.emit('');
+      } else {
+        this.selectedLabel = this.cachedPlaceholder;
+        this.currentPlaceholder = this.placeholder;
+      }
+    }
     const nextClass = 'arrow-up' + (this.dropdownActive ? ' is-reverse' : '')
     this.iconClass = !this.clearable ? nextClass : this.iconClass
   }
@@ -121,6 +143,7 @@ export class ElSelect extends ElSelectPoprs implements OnInit, OnDestroy, OnChan
     } else {
       this.model = nextValue
     }
+    this.searchChange.emit(this.selectedLabel)
     this.modelChange.emit(this.model)
     this.controlChange(this.model)
     this.subscriber.forEach(sub => sub())
@@ -139,6 +162,7 @@ export class ElSelect extends ElSelectPoprs implements OnInit, OnDestroy, OnChan
       this.dropdownActive && this.toggleHandle()
     })
     
+    this.currentPlaceholder = this.placeholder;
     this.updatePlaceholderWithMultipleMode()
   }
   
@@ -154,6 +178,11 @@ export class ElSelect extends ElSelectPoprs implements OnInit, OnDestroy, OnChan
       this.modelChange.emit(changes.model.currentValue)
       this.controlChange(this.model)
     }
+
+    if (changes.search) {
+      this.selectedLabel = changes.search.currentValue;
+    }
+
     this.subscriber.forEach(sub => sub())
   }
   
@@ -170,6 +199,7 @@ export class ElSelect extends ElSelectPoprs implements OnInit, OnDestroy, OnChan
   
   writeValue(value: any): void {
     this.model = value
+    this.selectedLabel = '';
     this.initModelWithMultipleMode()
     this.subscriber.forEach(sub => sub())
   }
