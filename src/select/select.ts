@@ -1,14 +1,11 @@
 import {
   Component, OnInit, ElementRef, Renderer2, OnDestroy, OnChanges, SimpleChanges, forwardRef, ViewChild, AfterViewInit,
 } from '@angular/core'
-import { ElSelectPoprs } from './select-props'
+import { ElSelectProps, SelectOption } from './select-props'
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms'
 import { WindowWrapper } from '../shared/services'
+import { BehaviorSubject } from 'rxjs';
 
-export type SelectOption = {
-  label?: string | number,
-  value: any,
-}
 
 @Component({
   selector: 'el-select',
@@ -39,7 +36,7 @@ export type SelectOption = {
         [name]="name"
         [size]="size"
         [elDisabled]="elDisabled"
-        [readonly]="!searchable || multiple || !dropdownActive"
+        [readonly]="!filterable || multiple || !dropdownActive"
         [className]="dropdownActive ? 'is-focus' : ''"
         (mouseenter)="mouseHandle(true)"
         (mouseleave)="mouseHandle(false)"
@@ -56,7 +53,7 @@ export type SelectOption = {
     </div>
   `,
 })
-export class ElSelect extends ElSelectPoprs implements OnInit, OnDestroy, OnChanges, AfterViewInit, ControlValueAccessor {
+export class ElSelect extends ElSelectProps implements OnInit, OnDestroy, OnChanges, AfterViewInit, ControlValueAccessor {
   
   @ViewChild('tags') tags: any
   @ViewChild('input') input: any
@@ -71,7 +68,8 @@ export class ElSelect extends ElSelectPoprs implements OnInit, OnDestroy, OnChan
   globalListener: Function
   currentPlaceholder: string | number = '';
   cachedPlaceholder: string | number = '';
-  
+
+  search$: BehaviorSubject<string | number> = new BehaviorSubject('');
   private selectOptions: SelectOption[] = []
   
   constructor(
@@ -82,8 +80,13 @@ export class ElSelect extends ElSelectPoprs implements OnInit, OnDestroy, OnChan
     super()
   }
 
-  updateLabel(value: string) {
-    this.searchChange.next(value);
+  updateLabel(value: string): void {
+    this.search$.next(value);
+  }
+
+  filterByLabel(query: string|number, option: SelectOption): boolean {
+    const reg = new RegExp(''+query, 'i');
+    return reg.test(''+option.label)
   }
   
   mouseHandle(isEnter: boolean = false): void {
@@ -97,12 +100,12 @@ export class ElSelect extends ElSelectPoprs implements OnInit, OnDestroy, OnChan
     if (this.elDisabled) return
     event && event.stopPropagation()
     this.dropdownActive = !this.dropdownActive
-    if (this.searchable && !this.multiple) {
+    if (this.filterable && !this.multiple) {
       if (this.dropdownActive) {
         this.cachedPlaceholder = this.selectedLabel;
         this.currentPlaceholder = this.model ? this.selectedLabel : this.placeholder;
         this.selectedLabel = '';
-        this.searchChange.emit('');
+        this.search$.next('');
       } else {
         this.selectedLabel = this.cachedPlaceholder;
         this.currentPlaceholder = this.placeholder;
@@ -123,7 +126,7 @@ export class ElSelect extends ElSelectPoprs implements OnInit, OnDestroy, OnChan
     
     // reset model
     this.model = null
-    this.modelChange.emit(this.model)
+    this.modelChange.next(this.model)
     this.controlChange(this.model)
     this.subscriber.forEach(sub => sub())
     
@@ -143,8 +146,8 @@ export class ElSelect extends ElSelectPoprs implements OnInit, OnDestroy, OnChan
     } else {
       this.model = nextValue
     }
-    this.searchChange.emit(this.selectedLabel)
-    this.modelChange.emit(this.model)
+    this.search$.next(this.selectedLabel)
+    this.modelChange.next(this.model)
     this.controlChange(this.model)
     this.subscriber.forEach(sub => sub())
   }
@@ -154,6 +157,11 @@ export class ElSelect extends ElSelectPoprs implements OnInit, OnDestroy, OnChan
   }
   
   ngOnInit(): void {
+    this.search$.subscribe(search => {
+      this.selectedLabel = search;
+
+    })
+
     const timer: number = window.setTimeout(() => {
       this.selfWidth = this.el.nativeElement.getBoundingClientRect().width
       clearTimeout(timer)
@@ -167,6 +175,7 @@ export class ElSelect extends ElSelectPoprs implements OnInit, OnDestroy, OnChan
   }
   
   ngOnChanges(changes: SimpleChanges): void {
+
     // not include model
     if (!changes || !changes.model) return
     if (changes.model.isFirstChange()) return
@@ -175,12 +184,8 @@ export class ElSelect extends ElSelectPoprs implements OnInit, OnDestroy, OnChan
     if (!changes.model.currentValue) {
       this.selectedLabel = changes.model.currentValue
       this.model = changes.model.currentValue
-      this.modelChange.emit(changes.model.currentValue)
+      this.modelChange.next(changes.model.currentValue)
       this.controlChange(this.model)
-    }
-
-    if (changes.search) {
-      this.selectedLabel = changes.search.currentValue;
     }
 
     this.subscriber.forEach(sub => sub())

@@ -98,49 +98,12 @@ clear(): void {
 `
 <!--你可以通过 model 来获取每次选择的值-->
 <!--或者通过绑定 (modelChange)=handle 来获得每次值改变的触发-->
-<el-select [model]="value" placeholder="请选择" (modelChange)="handle($event)" [searchable]="true" [search]="query" (searchChange)="queryChange($event)">
-  <el-option *ngFor="let item of filterByQuery(foods)"
+<el-select [model]="value" placeholder="请选择" (modelChange)="handle($event)" [filterable]="true">
+  <el-option *ngFor="let item of foods"
     [label]="item.label"
     [value]="item.value">
   </el-option>
 </el-select>
 <el-button (click)="clear()">clear</el-button>
-
-<script type="text">
-
-// in component
-
-value: any;
-query: string;
-foods:any = [{value: '选项1',label: 'Gold cake' },
-  { value: '选项2', label: 'Double skin milk' },
-  { value: '选项3', label: 'Oyster sauce' },
-  { value: '选项4', label: 'Dragon mustard' },
-  { value: '选项5', label: 'Peking duck' }];
-
-queryChange(query: string): void {
-  this.query = query;
-}
-
-filterByQuery(arr: any[]): any[] {
-  if (!this.query) {
-    return arr;
-  }
-  const reg = new RegExp(this.query, 'i')
-  return arr.filter(item => {
-    return reg.test(item.label);
-  })
-}
-
-handle(event: any):void {
-  this.value = event
-  console.log(event, this.value)
-}
-
-clear(): void {
-  this.value = null
-}
-
-</script>
 `
 ]

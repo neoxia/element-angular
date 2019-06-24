@@ -1,6 +1,11 @@
 import { EventEmitter, Input, Output } from '@angular/core'
 
-export class ElSelectPoprs {
+export type SelectOption = {
+  label?: string | number,
+  value: any,
+}
+
+export class ElSelectProps {
   
   @Input() set disabled(val: boolean) {   // todo, is discarded.
     console.warn('Element Angular: (disabled) is discarded, use [elDisabled] replace it.')
@@ -17,7 +22,6 @@ export class ElSelectPoprs {
   @Input() model: any
   @Output() modelChange: EventEmitter<any> = new EventEmitter<any>()
   
-  @Input() searchable: boolean = false;
-  @Input() search: string | number;
-  @Output() searchChange: EventEmitter<string | number> = new EventEmitter<string | number>()
+  @Input() filterable: boolean = false;
+  @Input('filter-method') filterMethod?: (query: string|number, option: SelectOption) => boolean;
 }

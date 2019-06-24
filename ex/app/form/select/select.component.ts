@@ -9,27 +9,13 @@ import code from './code'
 export class ExSelectComponent {
   
   exClass1: any = class {
-    value: any
+    value: any = '选项1'
     foods:any = [{value: '选项1',label: 'Gold cake' },
       { value: '选项2', label: 'Double skin milk' },
       { value: '选项3', label: 'Oyster sauce' },
       { value: '选项4', label: 'Dragon mustard' },
       { value: '选项5', label: 'Peking duck' }]
     
-    query: string;
-    queryChange(query: string): void {
-      this.query = query;
-    }
-    filterByQuery(arr: any[]): any[] {
-      if (!this.query) {
-        return arr;
-      }
-      const reg = new RegExp(this.query, 'i')
-      return arr.filter(item => {
-        return reg.test(item.label);
-      })
-    }
-
     handle(event: any):void {
       this.value = event
       console.log(event)
@@ -41,7 +27,7 @@ export class ExSelectComponent {
   }
 
   exClass: any = class {
-    value: any
+    value: any = '选项1'
     foods:any = [{value: '选项1',label: '黄金糕' },
       { value: '选项2', label: '双皮奶' },
       { value: '选项3', label: '蚵仔煎' },

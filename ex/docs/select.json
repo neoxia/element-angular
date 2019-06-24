@@ -65,25 +65,17 @@
       "default": false
     },
     {
-      "name": "searchable",
-      "notes": "Enable searching",
+      "name": "filterable",
+      "notes": "whether Select is filterable",
       "type": "boolean",
       "enum": null,
       "default": false
     },
     {
-      "name": "search",
-      "notes": "Search query",
-      "type": "string | number",
-      "enum": null,
-      "default": false
-    },
-    {
-      "name": "searchChange",
-      "notes": "The event that is triggered when the search query has changed.",
-      "type": "EventEmitter",
-      "enum": null,
-      "default": false
+      "name": "filter-method",
+      "notes": "custom filter method",
+      "type": "(query: string | number, option: { label?: string | number, value: any }) => boolean",
+      "enum": null
     }
   ]
 }
