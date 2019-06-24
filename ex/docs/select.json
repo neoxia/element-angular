@@ -63,6 +63,19 @@
       "type": "boolean",
       "enum": null,
       "default": false
+    },
+    {
+      "name": "filterable",
+      "notes": "whether Select is filterable",
+      "type": "boolean",
+      "enum": null,
+      "default": false
+    },
+    {
+      "name": "filter-method",
+      "notes": "custom filter method",
+      "type": "(query: string | number, option: { label?: string | number, value: any }) => boolean",
+      "enum": null
     }
   ]
 }
