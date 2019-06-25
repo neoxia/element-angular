@@ -8,8 +8,26 @@ import code from './code'
 })
 export class ExSelectComponent {
   
+  exClass1: any = class {
+    value: any = '选项1'
+    foods:any = [{value: '选项1',label: 'Gold cake' },
+      { value: '选项2', label: 'Double skin milk' },
+      { value: '选项3', label: 'Oyster sauce' },
+      { value: '选项4', label: 'Dragon mustard' },
+      { value: '选项5', label: 'Peking duck' }]
+    
+    handle(event: any):void {
+      this.value = event
+      console.log(event)
+    }
+  
+    clear(): void {
+      this.value = null
+    }
+  }
+
   exClass: any = class {
-    value: any
+    value: any = '选项1'
     foods:any = [{value: '选项1',label: '黄金糕' },
       { value: '选项2', label: '双皮奶' },
       { value: '选项3', label: '蚵仔煎' },

@@ -93,4 +93,17 @@ clear(): void {
   </el-option>
 </el-select>
 `,
+
+// Searchable select
+`
+<!--你可以通过 model 来获取每次选择的值-->
+<!--或者通过绑定 (modelChange)=handle 来获得每次值改变的触发-->
+<el-select [model]="value" placeholder="请选择" (modelChange)="handle($event)" [filterable]="true">
+  <el-option *ngFor="let item of foods"
+    [label]="item.label"
+    [value]="item.value">
+  </el-option>
+</el-select>
+<el-button (click)="clear()">clear</el-button>
+`
 ]

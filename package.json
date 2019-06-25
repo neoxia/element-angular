@@ -1,6 +1,6 @@
 {
-  "name": "element-angular",
-  "version": "0.7.6",
+  "name": "@sascha245/element-angular",
+  "version": "0.8.1",
   "description": "element ui for angular",
   "main": "./release/element-angular.module.js",
   "unpkg": "bundle/element-angular.js",
@@ -27,24 +27,7 @@
     "commit": "node_modules/commitizen/bin/commitizen init cz-conventional-changelog --save --save-exact",
     "commitmsg": "commitlint -e $GIT_PARAMS"
   },
-  "faas": {
-    "domain": "element-angular",
-    "public": "dist",
-    "description": "element ui for angular",
-    "author_name": "WittBulter",
-    "author_email": "nanazuimeng123@gmail.com",
-    "notice": [
-      "zhendong.li@ele.me"
-    ],
-    "build": [
-      "npm i",
-      "npm run ex:build --publish_type=faas"
-    ]
-  },
-  "repository": {
-    "type": "git",
-    "url": "git@github.com:eleme/element-angular.git"
-  },
+  "repository": "https://github.com/sascha245/element-angular.git",
   "keywords": [
     "eleme",
     "element",
@@ -52,9 +35,9 @@
     "typescript"
   ],
   "bugs": {
-    "url": "https://github.com/eleme/element-angular/issues"
+    "url": "https://github.com/sascha245/element-angular/issues"
   },
-  "author": "WittBulter",
+  "author": "Sascha Braun",
   "license": "MIT",
   "devDependencies": {
     "@angular/animations": "^4.0.0",

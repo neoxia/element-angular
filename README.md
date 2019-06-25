@@ -10,6 +10,8 @@
 [![npm](https://img.shields.io/npm/dt/element-angular.svg)](http://npm-stat.com/charts.html?package=v2ex-cli)
 [![Join the chat at https://gitter.im/element-angular/Lobby](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/element-angular/Lobby?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 
+*Forked from https://github.com/ElemeFE/element-angular*
+
 ## Catalog
 
 -  [Documentation](#documentation)
