@@ -1,5 +1,5 @@
 {
-  "name": "@sascha245/element-angular",
+  "name": "@neoxia-js/element-angular",
   "version": "0.8.1",
   "description": "element ui for angular",
   "main": "./release/element-angular.module.js",
@@ -27,7 +27,7 @@
     "commit": "node_modules/commitizen/bin/commitizen init cz-conventional-changelog --save --save-exact",
     "commitmsg": "commitlint -e $GIT_PARAMS"
   },
-  "repository": "https://github.com/sascha245/element-angular.git",
+  "repository": "https://github.com/neoxia/element-angular.git",
   "keywords": [
     "eleme",
     "element",
@@ -35,7 +35,7 @@
     "typescript"
   ],
   "bugs": {
-    "url": "https://github.com/sascha245/element-angular/issues"
+    "url": "https://github.com/neoxia/element-angular/issues"
   },
   "author": "Sascha Braun",
   "license": "MIT",
