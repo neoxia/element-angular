@@ -40,7 +40,7 @@ export class ElOption implements OnInit {
   ngOnInit(): void {
     this.rootSelect.search$.subscribe(query => {
       const method = this.rootSelect.filterMethod || this.rootSelect.filterByLabel;
-      this.visible = method(query, this)
+      this.visible = this.rootSelect.filterable ? method(query, this) : true;
     })
 
     const updateHandle = () => {
