@@ -1,6 +1,6 @@
 {
   "name": "@neoxia-js/element-angular",
-  "version": "0.8.1",
+  "version": "0.8.2",
   "description": "element ui for angular",
   "main": "./release/element-angular.module.js",
   "unpkg": "bundle/element-angular.js",
